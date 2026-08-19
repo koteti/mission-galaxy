@@ -429,17 +429,21 @@ let resetArmed = false;
 let resetTimer = null;
 
 function resetAll(){
-  const btn = document.getElementById('resetBtn');
-  if(!resetArmed){
-    resetArmed = true;
-    btn.textContent = 'Точно скинути? Натисни ще раз';
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(()=>{
-      resetArmed = false;
-      btn.textContent = 'Скинути весь прогрес місії';
-    }, 3000);
+  const pass = prompt('Доступ лише для адміністратора. Введіть пароль:');
+  
+  // Заміни "1234" на будь-який свій пароль
+  if(pass !== '0887'){
+    showToast('❌ Невірний пароль!');
     return;
   }
+
+  if(confirm('Ти точно хочеш безповоротно скинути весь прогрес місії?')){
+    state = { total: 0, log: [], reachedGoal: false };
+    saveState();
+    render();
+    showToast('🔄 Прогрес місії успішно скинуто');
+  }
+}
   clearTimeout(resetTimer);
   resetArmed = false;
   btn.textContent = 'Скинути весь прогрес місії';
