@@ -92,12 +92,15 @@
  .orbit-labels{display:flex; justify-content:space-between; font-size:0.72rem; color: #FFFFFF; margin-top:2px;}
 
   .stats-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
-  .stat{
+.stat{
     flex:1; min-width:130px;
     background:var(--bg);
     border:1px solid var(--line);
     border-radius:12px;
     padding:10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .stat-label{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color: #FFFFFF;}
   .stat-value{font-family:'Space Grotesk', sans-serif; font-size:1.15rem; font-weight:700; margin-top:2px;}
