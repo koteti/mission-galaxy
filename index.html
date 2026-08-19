@@ -305,12 +305,12 @@ const db = getFirestore(firebaseApp);
 const progressRef = doc(db, "mission", "progress");
 
 const EARN_ACTIONS = [
-  {id:'chore', label:'Хатня справа без нагадування', points:10, icon:'🧹'},
+  {id:'chore', label:'Пропилососив квартиру', points:30, icon:'🧹'},
   {id:'walk', label:'Повернувся з прогулянки вчасно', points:10, icon:'🏃‍♂️'},
   {id:'shopping', label:'Допоміг з покупками', points:20, icon:'🛒'},
   {id:'initiative', label:'Щось зробив сам без нагадування', points:20, icon:'💡'},
   {id:'promise', label:'Дотримав слова', points:15, icon:'🤝'},
-  {id:'calm', label:'День без сварок', points:10, icon:'😇'},
+  {id:'calm', label:'День без сварок', points:15, icon:'😇'},
   {id:'mosaic', label:'Ліпив алмазну мозаїку (30+ хв)', points:10, icon:'💎'},
   {id:'cats', label:'Вичесав Сіму та Масяню', points:20, icon:'😻'},
   {id:'phone', label:'Віддав телефон ввечері вчасно', points:15, icon:'📱'},
