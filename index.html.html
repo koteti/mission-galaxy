@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Місія: Galaxy Fit3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12142B;
+    --panel:#1C2044;
+    --panel-alt:#232853;
+    --line: rgba(237,238,245,0.08);
+    --gold:#F4B942;
+    --teal:#4ECDC4;
+    --coral:#FF6F91;
+    --text:#EDEEF5;
+    --text-dim:#9098C2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at top, #1a1e42 0%, #12142B 55%, #0c0e1f 100%);
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    padding: 28px 16px 60px;
+    min-height:100vh;
+  }
+  .wrap{max-width:760px; margin:0 auto;}
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px;
+  }
+  .eyebrow{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 10px;
+  }
+  .sub{color:var(--text-dim); font-size:0.92rem; margin:0 0 24px; line-height:1.5;}
+
+  .track-card{
+    background: linear-gradient(180deg, var(--panel), var(--panel-alt));
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px 20px 18px;
+    margin-bottom:20px;
+  }
+  .track-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; flex-wrap:wrap; gap:6px;}
+  .points-big{font-family:'Space Grotesk', sans-serif; font-size:2.1rem; font-weight:700;}
+  .points-big span{color:var(--text-dim); font-size:1.1rem; font-weight:500;}
+  .goal-status{font-size:0.82rem; color:var(--teal); font-weight:700;}
+  .goal-status.behind{color:var(--text-dim); font-weight:500;}
+  .goal-status.drop{color:var(--coral);}
+
+  .orbit{
+    position:relative;
+    height:54px;
+    background: var(--bg);
+    border-radius:999px;
+    border:1px solid var(--line);
+    overflow:visible;
+    margin: 10px 0 6px;
+  }
+  .orbit-fill{
+    position:absolute; top:0; left:0; height:100%;
+    border-radius:999px;
+    background: linear-gradient(90deg, #2A6F6A, var(--teal));
+    transition: width 0.5s ease;
+  }
+  .rocket{
+    position:absolute; top:50%; transform: translate(-50%,-50%);
+    font-size:1.5rem;
+    transition: left 0.5s ease;
+    filter: drop-shadow(0 0 6px rgba(78,205,196,0.6));
+  }
+  .planet{
+    position:absolute; right:8px; top:50%; transform:translateY(-50%);
+    font-size:1.4rem;
+  }
+  .orbit-labels{display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-dim); margin-top:2px;}
+
+  .stats-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .stat{
+    flex:1; min-width:130px;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px 12px;
+  }
+  .stat-label{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim);}
+  .stat-value{font-family:'Space Grotesk', sans-serif; font-size:1.15rem; font-weight:700; margin-top:2px;}
+  .stat-value.warn{color:var(--gold);}
+
+  .cap-bar{margin-top:14px;}
+  .cap-track{height:8px; background:var(--bg); border-radius:999px; overflow:hidden; border:1px solid var(--line);}
+  .cap-fill{height:100%; background:var(--gold); transition: width 0.3s ease;}
+  .cap-text{font-size:0.74rem; color:var(--text-dim); margin-top:5px;}
+
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;}
+  @media (max-width:600px){ .cols{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+  }
+  .panel h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.9rem;
+    margin:0 0 12px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .panel.earn h2{color:var(--teal);}
+  .panel.lose h2{color:var(--coral);}
+
+  .action-btn{
+    width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--panel-alt);
+    border:1px solid var(--line);
+    border-radius:10px;
+    color:var(--text);
+    padding:10px 12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    font-family:'Manrope', sans-serif;
+    font-size:0.86rem;
+    text-align:left;
+    transition: transform 0.12s ease, background 0.12s ease;
+  }
+  .action-btn:hover{background:#2A3060;}
+  .action-btn:active{transform: scale(0.98);}
+  .action-btn:disabled{opacity:0.35; cursor:not-allowed;}
+  .action-left{display:flex; align-items:center; gap:8px;}
+  .action-pts.earn{color:var(--teal); font-weight:700;}
+  .action-pts.lose{color:var(--coral); font-weight:700;}
+
+  .bonus-btn{
+    width:100%; margin-top:4px;
+    background:transparent;
+    border:1px dashed var(--gold);
+    color:var(--gold);
+    border-radius:10px;
+    padding:9px 12px;
+    font-size:0.82rem;
+    cursor:pointer;
+    font-family:'Manrope', sans-serif;
+  }
+
+  .log-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+  }
+  .log-card h2{font-family:'Space Grotesk', sans-serif; font-size:0.9rem; margin:0 0 10px; color:var(--text-dim);}
+  .log-empty{color:var(--text-dim); font-size:0.85rem;}
+  .log-item{
+    display:flex; justify-content:space-between;
+    font-size:0.82rem;
+    padding:7px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .log-item:last-child{border-bottom:none;}
+  .log-item .lp{font-weight:700;}
+  .log-item .lp.pos{color:var(--teal);}
+  .log-item .lp.neg{color:var(--coral);}
+  .log-date{color:var(--text-dim); font-size:0.72rem;}
+
+  .toast{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--panel-alt); border:1px solid var(--line);
+    padding:10px 16px; border-radius:10px; font-size:0.85rem;
+    opacity:0; transition: all 0.25s ease; pointer-events:none;
+    max-width:90%; text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .reset-link{
+    display:block; text-align:center; margin-top:22px;
+    color:var(--text-dim); font-size:0.75rem; text-decoration:underline; cursor:pointer;
+    background:none; border:none; width:100%;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Місія · День народження 17 жовтня</p>
+  <h1>Місія: Galaxy Fit3 🚀</h1>
+  <p class="sub">1000 балів = годинник. Бали можна і заробити, і втратити — стеж за курсом до самого фінішу.</p>
+
+  <div class="track-card">
+    <div class="track-top">
+      <div class="points-big" id="pointsBig">0 <span>/ 500</span></div>
+      <div class="goal-status" id="goalStatus">До цілі ще далеко</div>
+    </div>
+    <div class="orbit">
+      <div class="orbit-fill" id="orbitFill" style="width:0%"></div>
+      <div class="rocket" id="rocket" style="left:0%">🚀</div>
+      <div class="planet">🪐</div>
+    </div>
+    <div class="orbit-labels"><span>Старт</span><span>Galaxy Fit3</span></div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-label">До 1 жовтня</div>
+        <div class="stat-value" id="daysToCollect">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">До дня народження</div>
+        <div class="stat-value" id="daysToBday">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Темп/день, щоб встигнути</div>
+        <div class="stat-value warn" id="pace">—</div>
+      </div>
+    </div>
+
+    <div class="cap-bar">
+      <div class="cap-track"><div class="cap-fill" id="capFill" style="width:0%"></div></div>
+      <div class="cap-text" id="capText">Сьогодні зароблено 0 / 20 балів (денний ліміт)</div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="panel earn">
+      <h2>✅ Заробити бали</h2>
+      <div id="earnList"></div>
+      <button class="bonus-btn" id="bonusBtn">🌟 Тижневий бонус +50 (якщо без мінусів 7 днів)</button>
+    </div>
+    <div class="panel lose">
+      <h2>⚠️ Втратити бали</h2>
+      <div id="loseList"></div>
+    </div>
+  </div>
+
+  <div class="log-card">
+    <h2>Журнал місії</h2>
+    <div id="log"><p class="log-empty">Поки що подій немає — почни з першої дії ліворуч.</p></div>
+  </div>
+
+  <button class="reset-link" id="resetBtn">Скинути весь прогрес місії</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+// ==== ВСТАВТЕ СЮДИ СВІЙ FIREBASE CONFIG (отримаєте його в кроках нижче) ====
+const firebaseConfig = {
+  apiKey: "AIzaSyC3QUzJeA59_ghX3c6F-ZVG9vOmutSkNHs",
+  authDomain: "mission-galaxy.firebaseapp.com",
+  projectId: "mission-galaxy",
+  storageBucket: "mission-galaxy.firebasestorage.app",
+  messagingSenderId: "13838338323",
+  appId: "1:13838338323:web:9c6cd5f52fe9c02b0672e6"
+};
+// ============================================================================
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const progressRef = doc(db, "mission", "progress");
+
+const EARN_ACTIONS = [
+  {id:'chore', label:'Хатня справа без нагадування', points:20, icon:'🧹'},
+  {id:'walk', label:'Повернувся з прогулянки вчасно', points:20, icon:'⏰'},
+  {id:'shopping', label:'Допоміг з покупками', points:40, icon:'🛒'},
+  {id:'initiative', label:'Щось зробив сам без нагадування', points:40, icon:'💡'},
+  {id:'promise', label:'Дотримав слова', points:30, icon:'🤝'},
+  {id:'calm', label:'День без сварок', points:10, icon:'🙂'},
+  {id:'mosaic', label:'Алмазна мозаїка (30+ хв)', points:20, icon:'✨'},
+  {id:'cats', label:'Вичесав котів', points:20, icon:'🐱'},
+  {id:'phone', label:'Віддав телефон ввечері вчасно', points:30, icon:'📱'},
+  {id:'tablet', label:'Віддав планшет вчасно', points:20, icon:'📲'},
+];
+const LOSE_ACTIONS = [
+  {id:'late', label:'Запізнився з прогулянки', points:-30, icon:'🚨'},
+  {id:'rude', label:'Грубість / сварка / крик', points:-40, icon:'😠'},
+  {id:'ignore', label:'Проігнорував прохання', points:-20, icon:'🙉'},
+  {id:'broken', label:'Не виконав обіцяне', points:-30, icon:'💔'},
+  {id:'device', label:'Не віддав телефон/планшет вчасно', points:-30, icon:'🔌'},
+];
+
+const GOAL = 1000;
+const DAILY_CAP = 40;
+const COLLECT_DEADLINE = new Date('2026-10-01T00:00:00');
+const BIRTHDAY = new Date('2026-10-17T00:00:00');
+
+let state = { total: 0, log: [], reachedGoal: false };
+
+function todayStr(d = new Date()){ return d.toDateString(); }
+
+function subscribeToProgress(){
+  onSnapshot(progressRef, (snap)=>{
+    state = snap.exists() ? snap.data() : { total: 0, log: [], reachedGoal: false };
+    render();
+  }, (error)=>{
+    console.error('Firestore listen error', error);
+    showToast('Немає зв\'язку з базою даних — перевірте інтернет або Firebase config');
+  });
+}
+
+function saveState(){
+  setDoc(progressRef, state).catch(err=>{
+    console.error('Sync error', err);
+    showToast('Не вдалося синхронізувати — перевірте інтернет');
+  });
+}
+
+function todaysEarnSum(){
+  const t = todayStr();
+  return state.log
+    .filter(e => e.day === t && e.points > 0)
+    .reduce((s,e)=> s + e.points, 0);
+}
+
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> el.classList.remove('show'), 2200);
+}
+
+function addAction(action){
+  const isEarn = action.points > 0;
+  let pts = action.points;
+
+  if(isEarn){
+    const used = todaysEarnSum();
+    const remaining = DAILY_CAP - used;
+    if(remaining <= 0){
+      showToast('Денний ліміт (20 балів) вже вичерпано — продовжимо завтра 🚀');
+      return;
+    }
+    if(pts > remaining){
+      pts = remaining;
+      showToast('Зараховано частково — ліміт дня вичерпано');
+    }
+  }
+
+  state.total = Math.max(0, state.total + pts);
+  state.log.unshift({
+    label: action.label,
+    icon: action.icon,
+    points: pts,
+    day: todayStr(),
+    time: new Date().toLocaleString('uk-UA', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})
+  });
+  state.log = state.log.slice(0, 60);
+
+  if(state.total >= GOAL) state.reachedGoal = true;
+
+  saveState();
+  render();
+}
+
+function weeklyBonus(){
+  const weekAgo = Date.now() - 7*24*60*60*1000;
+  const recentNeg = state.log.some(e => e.points < 0 && new Date(e.time.split(',')[0].split('.').reverse().join('-')) >= weekAgo);
+  // simpler robust check: look at last 7 unique days of log entries for any negative
+  const hasNegLast7 = state.log.some(e => e.points < 0);
+  // Use a day-count based check instead: negatives among entries added in last 7 calendar days
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-7);
+  const negativeRecently = state.log.some(e => e.points < 0 && new Date(e.day) >= cutoff);
+
+  if(negativeRecently){
+    showToast('За останні 7 днів були штрафи — бонус поки недоступний');
+    return;
+  }
+  state.total = Math.max(0, state.total + 50);
+  state.log.unshift({label:'Тижневий бонус — жодного мінусу', icon:'🌟', points:50, day: todayStr(), time: new Date().toLocaleString('uk-UA', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})});
+  if(state.total >= GOAL) state.reachedGoal = true;
+  saveState();
+  render();
+  showToast('+50 бонусних балів за чистий тиждень!');
+}
+
+let resetArmed = false;
+let resetTimer = null;
+
+function resetAll(){
+  const btn = document.getElementById('resetBtn');
+  if(!resetArmed){
+    resetArmed = true;
+    btn.textContent = 'Точно скинути? Натисни ще раз';
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(()=>{
+      resetArmed = false;
+      btn.textContent = 'Скинути весь прогрес місії';
+    }, 3000);
+    return;
+  }
+  clearTimeout(resetTimer);
+  resetArmed = false;
+  btn.textContent = 'Скинути весь прогрес місії';
+  state = { total: 0, log: [], reachedGoal: false };
+  saveState();
+  render();
+  showToast('Прогрес місії скинуто');
+}
+
+function daysUntil(target){
+  const ms = target - new Date();
+  return Math.max(0, Math.ceil(ms / (1000*60*60*24)));
+}
+
+function render(){
+  const pct = Math.min(100, (state.total / GOAL) * 100);
+  document.getElementById('pointsBig').innerHTML = `${state.total} <span>/ ${GOAL}</span>`;
+  document.getElementById('orbitFill').style.width = pct + '%';
+  document.getElementById('rocket').style.left = `calc(${pct}% )`;
+
+  const dCollect = daysUntil(COLLECT_DEADLINE);
+  const dBday = daysUntil(BIRTHDAY);
+  document.getElementById('daysToCollect').textContent = dCollect + ' дн.';
+  document.getElementById('daysToBday').textContent = dBday + ' дн.';
+
+  const remaining = Math.max(0, GOAL - state.total);
+  const pace = dCollect > 0 ? Math.ceil(remaining / dCollect) : remaining;
+  document.getElementById('pace').textContent = remaining === 0 ? '—' : pace + ' б/день';
+
+  const statusEl = document.getElementById('goalStatus');
+  if(state.total >= GOAL){
+    statusEl.textContent = 'Ціль досягнута — тримай рівень до 17 жовтня!';
+    statusEl.className = 'goal-status';
+  } else if(state.reachedGoal && state.total < GOAL){
+    statusEl.textContent = 'Рівень впав нижче цілі — потрібно відновити!';
+    statusEl.className = 'goal-status drop';
+  } else {
+    statusEl.textContent = `Ще ${remaining} балів до мети`;
+    statusEl.className = 'goal-status behind';
+  }
+
+  const used = todaysEarnSum();
+  document.getElementById('capFill').style.width = Math.min(100,(used/DAILY_CAP)*100) + '%';
+  document.getElementById('capText').textContent = `Сьогодні зароблено ${used} / ${DAILY_CAP} балів (денний ліміт)`;
+
+  const earnList = document.getElementById('earnList');
+  earnList.innerHTML = '';
+  const capUsed = used >= DAILY_CAP;
+  EARN_ACTIONS.forEach(a=>{
+    const btn = document.createElement('button');
+    btn.className = 'action-btn';
+    btn.disabled = capUsed;
+    btn.innerHTML = `<span class="action-left">${a.icon} ${a.label}</span><span class="action-pts earn">+${a.points}</span>`;
+    btn.onclick = ()=> addAction(a);
+    earnList.appendChild(btn);
+  });
+
+  const loseList = document.getElementById('loseList');
+  loseList.innerHTML = '';
+  LOSE_ACTIONS.forEach(a=>{
+    const btn = document.createElement('button');
+    btn.className = 'action-btn';
+    btn.innerHTML = `<span class="action-left">${a.icon} ${a.label}</span><span class="action-pts lose">${a.points}</span>`;
+    btn.onclick = ()=> addAction(a);
+    loseList.appendChild(btn);
+  });
+
+  const logEl = document.getElementById('log');
+  if(state.log.length === 0){
+    logEl.innerHTML = '<p class="log-empty">Поки що подій немає — почни з першої дії ліворуч.</p>';
+  } else {
+    logEl.innerHTML = state.log.slice(0,15).map(e=>`
+      <div class="log-item">
+        <span>${e.icon} ${e.label}</span>
+        <span><span class="lp ${e.points>0?'pos':'neg'}">${e.points>0?'+':''}${e.points}</span> <span class="log-date">${e.time}</span></span>
+      </div>
+    `).join('');
+  }
+}
+
+document.getElementById('bonusBtn').onclick = weeklyBonus;
+document.getElementById('resetBtn').onclick = resetAll;
+
+subscribeToProgress();
+</script>
+</body>
+</html>
