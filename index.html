@@ -126,7 +126,7 @@
     margin:0 0 12px;
     display:flex; align-items:center; gap:6px;
   }
- .panel.earn h2{color: #5ad88f;}
+ .panel.earn h2{color: #3383f0;}
   .panel.lose h2{color:var(--gold);}
 
   .action-btn{
@@ -425,13 +425,9 @@ if(state.total >= GOAL && !state.reachedGoal) {
   showToast('+50 бонусних балів за чистий тиждень!');
 }
 
-let resetArmed = false;
-let resetTimer = null;
-
 function resetAll(){
   const pass = prompt('Доступ лише для адміністратора. Введіть пароль:');
   
-  // Заміни "1234" на будь-який свій пароль
   if(pass !== '0887'){
     showToast('❌ Невірний пароль!');
     return;
@@ -444,13 +440,6 @@ function resetAll(){
     showToast('🔄 Прогрес місії успішно скинуто');
   }
 }
-  clearTimeout(resetTimer);
-  resetArmed = false;
-  btn.textContent = 'Скинути весь прогрес місії';
-  state = { total: 0, log: [], reachedGoal: false };
-  saveState();
-  render();
-  showToast('Прогрес місії скинуто');
 
 function daysUntil(target){
   const ms = target - new Date();
