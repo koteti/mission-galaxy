@@ -303,22 +303,23 @@ const progressRef = doc(db, "mission", "progress");
 
 const EARN_ACTIONS = [
   {id:'chore', label:'Хатня справа без нагадування', points:10, icon:'🧹'},
-  {id:'walk', label:'Повернувся з прогулянки вчасно', points:10, icon:'🏃🏻‍♂️'},
+  {id:'walk', label:'Повернувся з прогулянки вчасно', points:10, icon:'🏃‍♂️'},
   {id:'shopping', label:'Допоміг з покупками', points:20, icon:'🛒'},
   {id:'initiative', label:'Щось зробив сам без нагадування', points:20, icon:'💡'},
   {id:'promise', label:'Дотримав слова', points:15, icon:'🤝'},
   {id:'calm', label:'День без сварок', points:10, icon:'😇'},
   {id:'mosaic', label:'Ліпив алмазну мозаїку (30+ хв)', points:10, icon:'💎'},
-  {id:'cats', label:'Вичесав Сіму та Масяню', points:20, icon:'🐱'},
+  {id:'cats', label:'Вичесав Сіму та Масяню', points:20, icon:'😻'},
   {id:'phone', label:'Віддав телефон ввечері вчасно', points:15, icon:'📱'},
-  {id:'tablet', label:'Віддав планшет вчасно', points:10, icon:📴'},
+  {id:'tablet', label:'Віддав планшет вчасно', points:10, icon:'📴'}
 ];
+
 const LOSE_ACTIONS = [
   {id:'late', label:'Запізнився з прогулянки', points:-40, icon:'🚨'},
-  {id:'rude', label:'Грубив / сварився / кричав', points:-30, icon:'😠'},
+  {id:'rude', label:'Грубив / сварився / кричав', points:-30, icon:'😡'},
   {id:'ignore', label:'Проігнорував прохання', points:-15, icon:'🫢'},
   {id:'broken', label:'Не виконав обіцяне', points:-15, icon:'💔'},
-  {id:'device', label:'Не віддав телефон/планшет вчасно', points:-20, icon:'🪫'},
+  {id:'device', label:'Не віддав телефон/планшет вчасно', points:-20, icon:'🪫'}
 ];
 
 const GOAL = 2000;
