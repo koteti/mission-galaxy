@@ -216,9 +216,50 @@
     border: none; padding: 12px 24px; border-radius: 10px;
     font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 1rem;
   }
+  .rules-overlay {
+    display: none; /* Приховано за замовчуванням */
+    position: fixed; inset: 0; 
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .rules-box {
+    background: var(--bg);
+    border: 1px solid var(--gold);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .rules-box h2 {
+    color: var(--gold); margin-bottom: 20px; text-align: center;
+  }
+  .rules-box p {
+    color: #FFFFFF; font-size: 0.95rem; margin-bottom: 12px; line-height: 1.5;
+  }
+  .rules-btn {
+    background: #4CAF50; color: #000; 
+    font-weight: 700; font-size: 1rem;
+    padding: 14px; width: 100%;
+    border: none; border-radius: 10px;
+    cursor: pointer; margin-top: 10px;
+    font-family: inherit;
+  }
+  .rules-btn:active { opacity: 0.8; }
 </style>
 </head>
 <body>
+  <div id="rulesModal" class="rules-overlay">
+  <div class="rules-box">
+    <h2>📜 Правила Місії</h2>
+    <p><b>1. Будь чесним:</b> За накрутку балів (позначити виконаним те, що насправді не робив) штраф -5б. та скидання накручених балів адміністратором.</p>
+    <p><b>2. Баланс:</b> Бали можна як заробляти за хороші справи, так і втрачати за косяки.</p>
+    <p><b>3. Головна мета:</b> Набери 2000 балів до свого Дня народження, щоб отримати Galaxy Fit3! Якщо не встигнеш - годинника не буде, тож веди себе якомога краще та старайся! Успіхів!</p>
+    <button id="closeRulesBtn" class="rules-btn">Зрозуміло, погнали!</button>
+  </div>
+</div>
 <div class="wrap">
   <p class="eyebrow">День народження 17 жовтня</p>
   <h1>Місія: Годинник Galaxy Fit3 ⌚ </h1>
@@ -339,6 +380,20 @@ function todayStr(d = new Date()){ return d.toDateString(); }
 function subscribeToProgress(){
   onSnapshot(progressRef, (snap)=>{
     state = snap.exists() ? snap.data() : { total: 0, log: [], reachedGoal: false };
+    // Логіка для вікна з правилами
+  const rulesModal = document.getElementById('rulesModal');
+  const closeRulesBtn = document.getElementById('closeRulesBtn');
+
+  // Перевіряємо пам'ять браузера: якщо ключа 'rulesSeen' немає, показуємо вікно
+  if (!localStorage.getItem('rulesSeen')) {
+    rulesModal.style.display = 'flex';
+  }
+
+  // Коли натискає кнопку "Зрозуміло"
+  closeRulesBtn.addEventListener('click', () => {
+    rulesModal.style.display = 'none'; // Ховаємо вікно
+    localStorage.setItem('rulesSeen', 'true'); // Записуємо в пам'ять, що він вже бачив правила
+  });
     render();
   }, (error)=>{
     console.error('Firestore listen error', error);
