@@ -302,7 +302,7 @@
     <div class="panel earn">
       <h2>✅ Заробити бали</h2>
       <div id="earnList"></div>
-      <button class="bonus-btn" id="bonusBtn">🌟 Тижневий бонус +100 (якщо без мінусів 7 днів)</button>
+      <button class="bonus-btn" id="bonusBtn">🌟 Тижневий бонус +150 (якщо без мінусів 7 днів)</button>
     </div>
     <div class="panel lose">
       <h2>⚠️ Втратити бали</h2>
@@ -474,7 +474,7 @@ function weeklyBonus(){
     showToast('За останні 7 днів були штрафи — бонус поки недоступний');
     return;
   }
-  state.total = Math.min(GOAL, Math.max(0, state.total + 100));
+  state.total = Math.min(GOAL, Math.max(0, state.total + 150));
   state.log.unshift({label:'Тижневий бонус — жодного мінусу', icon:'🌟', points:50, day: todayStr(), time: new Date().toLocaleString('uk-UA', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})});
 if(state.total >= GOAL && !state.reachedGoal) {
     state.reachedGoal = true;
@@ -482,7 +482,7 @@ if(state.total >= GOAL && !state.reachedGoal) {
   }
   saveState();
   render();
-  showToast('+50 бонусних балів за чистий тиждень!');
+  showToast('+150 бонусних балів за чистий тиждень!');
 }
 
 function resetAll(){
