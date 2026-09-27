@@ -475,7 +475,7 @@ function weeklyBonus(){
     return;
   }
   state.total = Math.min(GOAL, Math.max(0, state.total + 150));
-  state.log.unshift({label:'Тижневий бонус — жодного мінусу', icon:'🌟', points:50, day: todayStr(), time: new Date().toLocaleString('uk-UA', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})});
+  state.log.unshift({label:'Тижневий бонус — жодного мінусу', icon:'🌟', points:150, day: todayStr(), time: new Date().toLocaleString('uk-UA', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})});
 if(state.total >= GOAL && !state.reachedGoal) {
     state.reachedGoal = true;
     document.getElementById('winModal').classList.add('show');
